@@ -7,6 +7,7 @@ const ffmpeg = require('fluent-ffmpeg');
 const app = express()
 const cors = require('cors')
 const port = 8080
+const TEST_FFMPEG_PATH = "C:/ffmpeg/bin/ffmpeg.exe"
 const FFMPEG_PATH = "/usr/bin/ffmpeg"
 
 
@@ -25,7 +26,7 @@ app.get('/create-content', async (req, res) => {
           responseObject['data'] = filepath
           return res.json(responseObject)
         });
-      break;
+        break;
 
       case 'MP3':
         ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
@@ -38,7 +39,7 @@ app.get('/create-content', async (req, res) => {
             return res.json(responseObject)
           })
         });
-      break;
+        break;
 
       case 'WEBM':
         ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
@@ -50,14 +51,29 @@ app.get('/create-content', async (req, res) => {
             responseObject['data'] = filepath
             return res.json(responseObject)
           })
-          .on('error', (e) => {
-            console.log(e.toString())
+            .on('error', (e) => {
+              console.log(e.toString())
 
-          })
+            })
         });
-      
-      break;
 
+        break;
+      case 'AVI':
+        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
+          var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
+          proc.setFfmpegPath(TEST_FFMPEG_PATH)
+          proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.avi`).on('end', () => {
+            filepath = `${process.cwd()}\\temps\\${videoName}.avi`
+            responseObject['error'] = null
+            responseObject['data'] = filepath
+            return res.json(responseObject)
+          })
+            .on('error', (e) => {
+              console.log(e.toString())
+
+            })
+        });
+        break;
 
       case 'M4A':
         ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
@@ -69,14 +85,14 @@ app.get('/create-content', async (req, res) => {
             responseObject['data'] = filepath
             return res.json(responseObject)
           })
-          .on('error', (e) => {
-            console.log(e.toString())
+            .on('error', (e) => {
+              console.log(e.toString())
 
-          })
+            })
         });
-      break;
+        break;
     }
-  
+
   }
   catch (e) {
     responseObject['error'] = e.toString()
@@ -84,44 +100,44 @@ app.get('/create-content', async (req, res) => {
     return res.json(responseObject)
   }
 
- 
+
 
 
 })
 
 app.get('/download', async (req, res) => {
 
-  const {path} = req.query
+  const { path } = req.query
   console.log(path)
 
   return res.download(path)
 
-  
+
 
 
 })
 
-app.get('/delete', async (req,res) => {        
-    var responseObject = {}
+app.get('/delete', async (req, res) => {
+  var responseObject = {}
 
-    try{
-      fs.rm(`${process.cwd()}\\temps`, { recursive: true }, (err) => {
-        if (err) {
-            throw err;
-        }
-        fs.mkdirSync(`${process.cwd()}\\temps`)
-        console.log(`temps are deleted!`);
+  try {
+    fs.rm(`${process.cwd()}\\temps`, { recursive: true }, (err) => {
+      if (err) {
+        throw err;
+      }
+      fs.mkdirSync(`${process.cwd()}\\temps`)
+      console.log(`temps are deleted!`);
     });
-      responseObject['error'] = null
-      responseObject['data'] = 'Deleted Successfully'
-    }
-    catch(e){
-      responseObject['error'] = e.toString()
-      responseObject['data'] = null
-    }
+    responseObject['error'] = null
+    responseObject['data'] = 'Deleted Successfully'
+  }
+  catch (e) {
+    responseObject['error'] = e.toString()
+    responseObject['data'] = null
+  }
 
-    return res.json(responseObject)
-    
+  return res.json(responseObject)
+
 })
 
 app.listen(port, () => {
