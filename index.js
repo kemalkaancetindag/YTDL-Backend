@@ -20,8 +20,8 @@ app.get('/create-content', async (req, res) => {
   try {
     switch (type) {
       case 'MP4':
-        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', () => {
-          filepath = `${process.cwd()}\\temps\\${videoName}.mp4`
+        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}/temps/${videoName}.mp4`)).on('finish', () => {
+          filepath = `${process.cwd()}/temps/${videoName}.mp4`
           responseObject['error'] = null
           responseObject['data'] = filepath
           return res.json(responseObject)
@@ -29,11 +29,11 @@ app.get('/create-content', async (req, res) => {
         break;
 
       case 'MP3':
-        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
-          var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
+        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}/temps/${videoName}.mp4`)).on('finish', async () => {
+          var proc = new ffmpeg({ source: `${process.cwd()}/temps/${videoName}.mp4` })
           proc.setFfmpegPath(FFMPEG_PATH)
-          proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.mp3`).on('end', () => {
-            filepath = `${process.cwd()}\\temps\\${videoName}.mp3`
+          proc.saveToFile(`${process.cwd()}/temps/${videoName}.mp3`).on('end', () => {
+            filepath = `${process.cwd()}/temps/${videoName}.mp3`
             responseObject['error'] = null
             responseObject['data'] = filepath
             return res.json(responseObject)
@@ -42,11 +42,11 @@ app.get('/create-content', async (req, res) => {
         break;
 
       case 'WEBM':
-        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
-          var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
+        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}/temps/${videoName}.mp4`)).on('finish', async () => {
+          var proc = new ffmpeg({ source: `${process.cwd()}/temps/${videoName}.mp4` })
           proc.setFfmpegPath(FFMPEG_PATH)
-          proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.webm`).on('end', () => {
-            filepath = `${process.cwd()}\\temps\\${videoName}.webm`
+          proc.saveToFile(`${process.cwd()}/temps/${videoName}.webm`).on('end', () => {
+            filepath = `${process.cwd()}/temps/${videoName}.webm`
             responseObject['error'] = null
             responseObject['data'] = filepath
             return res.json(responseObject)
@@ -59,11 +59,11 @@ app.get('/create-content', async (req, res) => {
 
         break;
       case 'AVI':
-        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
-          var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
+        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}/temps/${videoName}.mp4`)).on('finish', async () => {
+          var proc = new ffmpeg({ source: `${process.cwd()}/temps/${videoName}.mp4` })
           proc.setFfmpegPath(FFMPEG_PATH)
-          proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.avi`).on('end', () => {
-            filepath = `${process.cwd()}\\temps\\${videoName}.avi`
+          proc.saveToFile(`${process.cwd()}/temps/${videoName}.avi`).on('end', () => {
+            filepath = `${process.cwd()}/temps/${videoName}.avi`
             responseObject['error'] = null
             responseObject['data'] = filepath
             return res.json(responseObject)
@@ -76,11 +76,11 @@ app.get('/create-content', async (req, res) => {
         break;
 
       case 'M4A':
-        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
-          var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
+        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}/temps/${videoName}.mp4`)).on('finish', async () => {
+          var proc = new ffmpeg({ source: `${process.cwd()}/temps/${videoName}.mp4` })
           proc.setFfmpegPath(FFMPEG_PATH)
-          proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.m4a`).on('end', () => {
-            filepath = `${process.cwd()}\\temps\\${videoName}.m4a`
+          proc.saveToFile(`${process.cwd()}/temps/${videoName}.m4a`).on('end', () => {
+            filepath = `${process.cwd()}/temps/${videoName}.m4a`
             responseObject['error'] = null
             responseObject['data'] = filepath
             return res.json(responseObject)
@@ -121,11 +121,11 @@ app.get('/delete', async (req, res) => {
   var responseObject = {}
 
   try {
-    fs.rm(`${process.cwd()}\\temps`, { recursive: true }, (err) => {
+    fs.rm(`${process.cwd()}/temps`, { recursive: true }, (err) => {
       if (err) {
         throw err;
       }
-      fs.mkdirSync(`${process.cwd()}\\temps`)
+      fs.mkdirSync(`${process.cwd()}/temps`)
       console.log(`temps are deleted!`);
     });
     responseObject['error'] = null
