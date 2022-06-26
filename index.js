@@ -96,7 +96,32 @@ app.get('/download', async (req, res) => {
 
   return res.download(path)
 
+  
 
+
+})
+
+app.get('/delete', async (req,res) => {        
+    var responseObject = {}
+
+    try{
+      fs.rm(`${process.cwd()}\\temps`, { recursive: true }, (err) => {
+        if (err) {
+            throw err;
+        }
+        fs.mkdirSync(`${process.cwd()}\\temps`)
+        console.log(`temps are deleted!`);
+    });
+      responseObject['error'] = null
+      responseObject['data'] = 'Deleted Successfully'
+    }
+    catch(e){
+      responseObject['error'] = e.toString()
+      responseObject['data'] = null
+    }
+
+    return res.json(responseObject)
+    
 })
 
 app.listen(port, () => {
