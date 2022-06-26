@@ -6,7 +6,8 @@ const ytdl = require('ytdl-core');
 const ffmpeg = require('fluent-ffmpeg');
 const app = express()
 const cors = require('cors')
-const port = 3000
+const port = 8080
+const FFMPEG_PATH = "/usr/bin/ffmpeg"
 
 
 app.use(cors())
@@ -29,7 +30,7 @@ app.get('/create-content', async (req, res) => {
       case 'MP3':
         ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
           var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
-          proc.setFfmpegPath("C:/FFmpeg/bin/ffmpeg.exe")
+          proc.setFfmpegPath(FFMPEG_PATH)
           proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.mp3`).on('end', () => {
             filepath = `${process.cwd()}\\temps\\${videoName}.mp3`
             responseObject['error'] = null
@@ -42,7 +43,7 @@ app.get('/create-content', async (req, res) => {
       case 'WEBM':
         ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
           var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
-          proc.setFfmpegPath("C:/FFmpeg/bin/ffmpeg.exe")
+          proc.setFfmpegPath(FFMPEG_PATH)
           proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.webm`).on('end', () => {
             filepath = `${process.cwd()}\\temps\\${videoName}.webm`
             responseObject['error'] = null
@@ -61,7 +62,7 @@ app.get('/create-content', async (req, res) => {
       case 'M4A':
         ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
           var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
-          proc.setFfmpegPath("C:/FFmpeg/bin/ffmpeg.exe")
+          proc.setFfmpegPath(FFMPEG_PATH)
           proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.m4a`).on('end', () => {
             filepath = `${process.cwd()}\\temps\\${videoName}.m4a`
             responseObject['error'] = null
