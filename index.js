@@ -61,7 +61,7 @@ app.get('/create-content', async (req, res) => {
       case 'AVI':
         ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}\\temps\\${videoName}.mp4`)).on('finish', async () => {
           var proc = new ffmpeg({ source: `${process.cwd()}\\temps\\${videoName}.mp4` })
-          proc.setFfmpegPath(TEST_FFMPEG_PATH)
+          proc.setFfmpegPath(FFMPEG_PATH)
           proc.saveToFile(`${process.cwd()}\\temps\\${videoName}.avi`).on('end', () => {
             filepath = `${process.cwd()}\\temps\\${videoName}.avi`
             responseObject['error'] = null
