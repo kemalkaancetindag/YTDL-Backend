@@ -9,6 +9,7 @@ const cors = require('cors')
 const port = 8080
 const TEST_FFMPEG_PATH = "C:/ffmpeg/bin/ffmpeg.exe"
 const FFMPEG_PATH = "/usr/bin/ffmpeg"
+const { exec } = require("child_process");
 
 
 app.use(cors())
@@ -39,6 +40,25 @@ app.get('/create-content', async (req, res) => {
             return res.json(responseObject)
           })
         });
+        break;
+      case '3GP':
+
+        ytdl(url).pipe(fs.createWriteStream(`${process.cwd()}/temps/${videoName}.mp4`)).on('finish', () => {
+          exec(`ffmpeg -y -i  "${process.cwd()}/temps/${videoName}.mp4" -r 20 -s 352x288 -vb 400k -acodec aac -strict experimental -ac 1 -ar 8000 -ab 24k "${process.cwd()}/temps/${videoName}.3gp"`, async (err, stdout, stderr) => {
+            if (err) {
+              responseObject['error'] = err.toString()
+              responseObject['data'] = null
+            }
+            else {
+              responseObject['error'] = null
+              responseObject['data'] = `${process.cwd()}/temps/${videoName}.3gp`
+            }
+
+            return res.json(responseObject)
+          });
+        });
+
+
         break;
 
       case 'WEBM':
@@ -108,7 +128,13 @@ app.get('/create-content', async (req, res) => {
 app.get('/download', async (req, res) => {
 
   const { path } = req.query
-  console.log(path)
+  var splittedPath = path.split('.')
+  var slashSplittedPath = path.split('/')
+  
+  if(splittedPath[splittedPath.length -1] === '3gp'){    
+    return res.download(path,slashSplittedPath[slashSplittedPath.length -1],{Headers:{'Content-Type':'video/3gpp'}})
+  }
+  
 
   return res.download(path)
 
