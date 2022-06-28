@@ -10,6 +10,7 @@ const port = 8080
 const TEST_FFMPEG_PATH = "C:/ffmpeg/bin/ffmpeg.exe"
 const FFMPEG_PATH = "/usr/bin/ffmpeg"
 const { exec } = require("child_process");
+const https = require('https')
 
 
 app.use(cors())
@@ -166,6 +167,18 @@ app.get('/delete', async (req, res) => {
 
 })
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
-})
+https
+  .createServer(
+    {
+      key: fs.readFileSync("./server.key"),
+      cert: fs.readFileSync("./server.cert"),
+    },
+    app
+  )
+  .listen(port, function () {
+    console.log(
+      "app listening on port 8080! Go to"
+    );
+  });
+
+
